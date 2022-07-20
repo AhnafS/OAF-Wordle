@@ -19,7 +19,7 @@ In this proejct, Gulp is configured to run the following functions:
 
 ### Deconstruction of Wordle:
 
-####Html/SCSS:
+#### Html/SCSS:
 
 <ul>
     <li>
@@ -38,11 +38,14 @@ In this proejct, Gulp is configured to run the following functions:
         Each letter div must have a class controlling its color
     </li>
 </ul>
-####JS: 
-    - setup important global variables 
-        - Guesses remaning 
-        - Current Inputed Guesses 
-        - Correct Word 
-    - Use keydown eventListiner to call a function called "changeContext" 
-        - changeContext checks if the button pressed was the Enter button, if it is, it runs another function called isCorrect
-        -If not it runs another function called changeLetter, which changes the letter of the current row
+#### JS:
+
+- setup important global variables
+
+  - Guesses remaning
+  - Current Inputed Guesses
+  - Correct Word
+
+- Use keydown eventListiner to call a function called "changeContext"
+  - changeContext checks if the button pressed was the Enter button, if it is, it runs another function called isCorrect
+    -If not it runs another function called changeLetter, which changes the letter of the current row
