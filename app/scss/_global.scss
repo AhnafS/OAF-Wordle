@@ -1,0 +1,102 @@
+html {
+  font-size: 100%;
+  width: 100vw;
+  height: 100vh;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  height: 100%;
+  background-color: #121213;
+  margin: 0;
+  padding: 0;
+  overflow-y: hidden;
+  display: block;
+}
+
+main {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  height: calc(100% - 65px);
+  display: flex;
+  flex-direction: column;
+}
+
+#boardContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+
+#board {
+  width: 250px;
+  height: 300px;
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  grid-gap: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 5px;
+}
+
+.tile {
+  border: 2px solid #3a3a3c;
+  height: 3rem;
+  width: 3rem;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  line-height: 2rem;
+  font-weight: bold;
+  vertical-align: middle;
+  box-sizing: border-box;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+#keyboardContainer {
+  height: 200px;
+  margin: 5rem 8px;
+  width: 100%;
+}
+
+.keyboard1,
+.keyboard2,
+.keyboard3 {
+  display: flex;
+  width: 100%;
+  margin: 0 auto 8px;
+  touch-action: manipulation;
+}
+
+.keyboardLetter {
+  font-family: inherit;
+  font-weight: bold;
+  border: 0;
+  padding: 0;
+  margin: 0 6px 0 0;
+  height: 58px;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  background-color: #818384;
+  color: #ffffff;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+}
