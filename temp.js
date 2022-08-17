@@ -110,21 +110,14 @@ const checkGuess = async () => {
   for (let i = 0; i < 5; i++) {
     let letterColor = "";
     let tile = row.children[i];
-    // let letter = currentGuess[i];
 
     let letterPosition = rightGuess.indexOf(currentGuess[i]);
-    // is letter in the correct guess
     if (letterPosition === -1) {
       letterColor = "grey";
     } else {
-      // now, letter is definitely in word
-      // if letter index and right guess index are the same
-      // letter is in the right position
       if (currentGuess[i] === rightGuess[i]) {
-        // shade green
         letterColor = "#538d4e";
       } else {
-        // shade box yellow
         letterColor = "#b59f3b";
       }
 
