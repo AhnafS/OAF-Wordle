@@ -49,37 +49,39 @@ const createKeyboard = () => {
   keyboardContainer.append(keyboard1, keyboard2, keyboard3);
 };
 
-//Listens for key presses
 document.addEventListener("keyup", (e) => {
   if (guessesLeft === 0) {
     return;
   }
 
-  let pressedKey = String(e.key);
-  if (pressedKey === "Backspace" && nxtLtr !== 0) {
+  let keypressed = String(e.key);
+  console.log(keypressed);
+  if (keypressed === "Backspace" && nxtLtr !== 0) {
     deleteLetter();
     return;
   }
 
-  if (pressedKey === "Enter") {
+  if (keypressed === "Enter") {
     checkGuess();
     return;
   }
 
-  let validKey = pressedKey.match(/[a-z]/gi);
-  if (!validKey || pressedKey === "Backspace" || pressedKey === "Enter") {
+  let validKey = keypressed.match(/[a-z]/gi);
+  if (!validKey || keypressed === "Backspace" || keypressed === "Enter") {
     return;
   } else {
-    insertLetter(pressedKey);
+    addLetter(keypressed);
   }
 });
 
-const insertLetter = (pressedKey) => {
+const addLetter = (keypressed) => {
   if (nxtLtr === 5) return;
   let row = document.querySelector(`.row${6 - guessesLeft}`);
+  console.log(row);
   let tile = row.children[nxtLtr];
-  tile.textContent = pressedKey;
-  currentGuess.push(pressedKey);
+  handleAnimation(tile, "pulse");
+  tile.textContent = keypressed;
+  currentGuess.push(keypressed);
   nxtLtr += 1;
 };
 
@@ -91,7 +93,7 @@ const deleteLetter = () => {
   nxtLtr -= 1;
 };
 
-function checkGuess() {
+const checkGuess = async () => {
   let row = document.querySelector(`.row${6 - guessesLeft}`);
   let guessString = "";
   let rightGuess = Array.from(rightGuessString);
@@ -107,32 +109,35 @@ function checkGuess() {
 
   for (let i = 0; i < 5; i++) {
     let letterColor = "";
-    let box = row.children[i];
+    let tile = row.children[i];
     // let letter = currentGuess[i];
 
     let letterPosition = rightGuess.indexOf(currentGuess[i]);
+    // is letter in the correct guess
     if (letterPosition === -1) {
       letterColor = "grey";
     } else {
+      // now, letter is definitely in word
+      // if letter index and right guess index are the same
+      // letter is in the right position
       if (currentGuess[i] === rightGuess[i]) {
         // shade green
-        letterColor = "#538d4e";
+        letterColor = "green";
       } else {
         // shade box yellow
-        letterColor = "#b59f3b";
+        letterColor = "yellow";
       }
 
       rightGuess[letterPosition] = "#";
     }
 
-    let delay = 250 * i;
-    setTimeout(() => {
-      box.style.backgroundColor = letterColor;
-    }, delay);
+    await sleep(250);
+    await handleAnimation(tile, "flipInX");
+    tile.style.backgroundColor = letterColor;
   }
 
   if (guessString === rightGuessString) {
-    alert("You guessed right! Game over!");
+    userGuessedCorrect(row);
     guessesLeft = 0;
     return;
   } else {
@@ -141,11 +146,108 @@ function checkGuess() {
     nxtLtr = 0;
 
     if (guessesLeft === 0) {
-      alert("You've run out of guesses! Game over!");
-      alert(`The right word was: "${rightGuessString}"`);
+      alert(`correct word was: "${rightGuessString}"`);
     }
   }
-}
+};
+
+// const changeColor = async () => {
+//   let row = document.querySelector(`.row${6 - guessesLeft}`);
+//   let rightGuess = Array.from(rightGuessString);
+//   let guessString = "";
+
+//   for (const val of currentGuess) {
+//     guessString += val;
+//   }
+
+//   if (guessString.length != 5) {
+//     alert("Not enough letters!");
+//     return;
+//   }
+
+//   console.log(row);
+
+//   for (let i = 0; i < 5; i++) {
+//     let letterColor = "";
+//     let tile = row.children[i];
+//     let letter = currentGuess[i];
+
+//     let letterPosition = rightGuess.indexOf(currentGuess[i]);
+//     // is letter in the correct guess
+//     if (letterPosition === -1) {
+//       letterColor = "grey";
+//     } else {
+//       // now, letter is definitely in word
+//       // if letter index and right guess index are the same
+//       // letter is in the right position
+//       if (currentGuess[i] === rightGuess[i]) {
+//         // shade green
+//         letterColor = "green";
+//       } else {
+//         // shade box yellow
+//         letterColor = "yellow";
+//       }
+
+//       rightGuess[letterPosition] = "#";
+//     }
+
+//     await sleep(250);
+//     await handleAnimation(tile, "flipInX");
+//     tile.style.backgroundColor = letterColor;
+
+//     // setTimeout(async () => {
+//     //   //animaton stuff
+//     //   await handleAnimation(tile, "flipInX");
+//     //   tile.style.backgroundColor = letterColor;
+//     // }, delay);
+//   }
+// };
+
+const userGuessedCorrect = async (row) => {
+  console.log("it came to user guessed correct");
+  // for (let i = 0; i < 5; i++) {
+  //   let tile = row.children[i];
+  //   await sleep(250);
+  //   tile.style.backgroundColor = "#538d4e";
+  //   await handleAnimation(tile, "flipInX");
+  //   // setTimeout(async () => {
+  //   //   tile.style.backgroundColor = "#538d4e";
+  //   //   await handleAnimation(tile, "flipInX");
+  //   // }, delay);
+  // }
+  for (let i = 0; i < 5; i++) {
+    let tile = row.children[i];
+    await sleep(250);
+    await handleAnimation(tile, "bounce");
+    // setTimeout(async () => {
+    //   await handleAnimation(tile, "bounce");
+    // }, delay);
+  }
+  return;
+};
+
+const sleep = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
+// Animations
+const handleAnimation = (element, animation, prefix = "animate__") =>
+  // We create a Promise and return it
+  new Promise((resolve, reject) => {
+    const animationName = `${prefix}${animation}`;
+    const node = element;
+
+    node.classList.add(`${prefix}animated`, animationName);
+
+    // When the animation ends, we clean the classes and resolve the Promise
+    function handleAnimationEnd(event) {
+      event.stopPropagation();
+      node.classList.remove(`${prefix}animated`, animationName);
+    }
+
+    node.addEventListener("animationend", handleAnimationEnd, { once: true });
+    resolve(1);
+  });
 
 window.addEventListener("load", () => {
   createBoard();
