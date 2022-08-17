@@ -27,6 +27,9 @@ const createKeyboardButton = (array) => {
     const tile = document.createElement("button");
     tile.textContent = letter;
     tile.classList.add("keyboardLetter");
+    tile.addEventListener("click", (e) => {
+      addLetter(letter);
+    });
     keyboardRow.append(tile);
   });
   return keyboardRow;
